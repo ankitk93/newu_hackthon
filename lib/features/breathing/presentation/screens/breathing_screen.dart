@@ -177,9 +177,11 @@ class _Content extends StatelessWidget {
           'Get ready',
           style: TextStyle(
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            height: 39 / 24,
           ),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 6),
         Text(
@@ -188,8 +190,11 @@ class _Content extends StatelessWidget {
             color: isDark
                 ? AppColors.crossIconColorDark
                 : AppColors.textSecondary,
-            fontSize: 12,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 21 / 14,
           ),
+          textAlign: TextAlign.center,
         ),
         const Spacer(flex: 2),
       ],
@@ -240,9 +245,11 @@ class _Content extends StatelessWidget {
                           color: isDark
                               ? AppColors.textPrimaryDark
                               : AppColors.textPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 39 / 24,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -251,8 +258,11 @@ class _Content extends StatelessWidget {
                           color: isDark
                               ? AppColors.crossIconColorDark
                               : AppColors.textSecondary,
-                          fontSize: 12,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 21 / 14,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 24),
                       // Progress bar
@@ -260,14 +270,15 @@ class _Content extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                         child: SizedBox(
                           height: 8,
+                          width: 240,
                           child: Stack(
                             children: [
-                              // Background (remaining)
-                              Container(
-                                decoration: BoxDecoration(
+                              // Background — fills entire bar
+                              Positioned.fill(
+                                child: ColoredBox(
                                   color: isDark
-                                      ? AppColors.iconContainerBgDark
-                                      : AppColors.gradientEnd,
+                                      ? const Color(0xFF28002A)
+                                      : const Color(0xFF6C0862),
                                 ),
                               ),
                               // Filled (gradient)
