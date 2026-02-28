@@ -258,18 +258,34 @@ class _Content extends StatelessWidget {
                       // Progress bar
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: s.progress,
-                          backgroundColor: isDark
-                              ? Colors.white12
-                              : AppColors.gradientEnd
-                                  .withValues(alpha: 0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            isDark
-                                ? AppColors.gradientStart
-                                : AppColors.gradientEnd,
+                        child: SizedBox(
+                          height: 8,
+                          child: Stack(
+                            children: [
+                              // Background (remaining)
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? AppColors.iconContainerBgDark
+                                      : AppColors.gradientEnd,
+                                ),
+                              ),
+                              // Filled (gradient)
+                              FractionallySizedBox(
+                                widthFactor: s.progress.clamp(0.0, 1.0),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        AppColors.gradientStart,
+                                        AppColors.gradientEnd,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          minHeight: 4,
                         ),
                       ),
                       const SizedBox(height: 8),
