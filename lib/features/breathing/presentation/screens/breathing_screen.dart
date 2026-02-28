@@ -96,6 +96,8 @@ class _Content extends StatelessWidget {
 
   // Top bar — full screen width, X left, Moon right
   Widget _topBar(BuildContext ctx, bool isDark) {
+    final bg = isDark ? AppColors.iconContainerBgDark : AppColors.crossIconBg;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -106,11 +108,21 @@ class _Content extends StatelessWidget {
               ctx.read<BreathingSessionBloc>().add(const CancelSession());
               Navigator.of(ctx).pop();
             },
-            child: Icon(Icons.close,
-                color: isDark
-                    ? AppColors.textPrimaryDark
-                    : AppColors.textPrimary,
-                size: 24),
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: bg),
+              child: Center(
+                child: SvgPicture.asset('assets/icons/icon_cross.svg',
+                  width: 12,
+                  height: 12,
+                  colorFilter: ColorFilter.mode(
+                    isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
           ),
           GestureDetector(
             onTap: () => ctx.read<ThemeCubit>().toggleTheme(),
@@ -272,7 +284,7 @@ class _Content extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // Pause/Resume — gradient pill
+                      // Pause/Resume button
                       GestureDetector(
                         onTap: () {
                           if (s.isPaused) {
@@ -289,12 +301,9 @@ class _Content extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 28, vertical: 12),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppColors.gradientStart,
-                                AppColors.gradientEnd,
-                              ],
-                            ),
+                            color: isDark
+                                ? AppColors.buttonBgColorDark
+                                : AppColors.crossIconBg,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Row(
@@ -304,14 +313,18 @@ class _Content extends StatelessWidget {
                                 s.isPaused
                                     ? Icons.play_arrow
                                     : Icons.pause,
-                                color: Colors.white,
+                                color: isDark
+                                    ? Colors.white
+                                    : AppColors.iconContainerBgDark,
                                 size: 16,
                               ),
                               const SizedBox(width: 6),
                               Text(
                                 s.isPaused ? 'Resume' : 'Pause',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: isDark
+                                      ? Colors.white
+                                      : AppColors.iconContainerBgDark,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),

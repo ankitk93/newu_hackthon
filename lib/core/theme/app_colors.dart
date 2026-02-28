@@ -67,6 +67,13 @@ class AppColors {
   static const Color bubbleBgDark = Color(0xFF383840);
 
   //button colors
-static const Color buttonBgColorLight = Color(0xFF630068);
-static const Color buttonBgColorDark = Color(0xFF823386);
+  static const Color buttonBgColorLight = Color(0xFF630068);
+  static const Color buttonBgColorDark = Color(0xFF823386);
+  static const Color crossIconBg = Color(0xFFEFE6F0);
+
+  // ─── Icon containers (Breathing screen) ───
+  static const Color iconContainerBgDark = Color(0xFF28002A);
+  static const Color crossIconColorDark = Color(0xFFA3A3A3);
+  static const Color sunIconColorDark = Color(0xFFFFFFFF);
+
 }
