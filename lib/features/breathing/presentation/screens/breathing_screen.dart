@@ -186,7 +186,7 @@ class _Content extends StatelessWidget {
           'Get going on your breathing session.',
           style: TextStyle(
             color: isDark
-                ? AppColors.textSecondaryDark
+                ? AppColors.crossIconColorDark
                 : AppColors.textSecondary,
             fontSize: 12,
           ),
@@ -249,7 +249,7 @@ class _Content extends StatelessWidget {
                         s.currentPhase.subtitle,
                         style: TextStyle(
                           color: isDark
-                              ? AppColors.textSecondaryDark
+                              ? AppColors.crossIconColorDark
                               : AppColors.textSecondary,
                           fontSize: 12,
                         ),
@@ -278,8 +278,8 @@ class _Content extends StatelessWidget {
                         'Cycle ${s.currentCycle} of ${s.config.rounds}',
                         style: TextStyle(
                           color: isDark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSecondary,
+                              ? AppColors.textPrimaryDark
+                              : AppColors.buttonBgColorLight,
                           fontSize: 12,
                         ),
                       ),
