@@ -59,37 +59,42 @@ class _SetupContent extends StatelessWidget {
               ),
             // Content
             SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: _maxW),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 12),
-                        // Moon/Sun icon — top right, 16x16, no bg
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () =>
-                                context.read<ThemeCubit>().toggleTheme(),
-                            child: SvgPicture.asset(
-                              isDark
-                                  ? 'assets/images/dark_mode_assets/icon_sun.svg'
-                                  : 'assets/images/light_mode_assets/icon_moon.svg',
-                              width: 24,
-                              height: 24,
-                              colorFilter: ColorFilter.mode(
-                                isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
+              child: Column(
+                children: [
+                  // Moon/Sun icon — full screen width, top right
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () =>
+                            context.read<ThemeCubit>().toggleTheme(),
+                        child: SvgPicture.asset(
+                          isDark
+                              ? 'assets/images/dark_mode_assets/icon_sun.svg'
+                              : 'assets/images/light_mode_assets/icon_moon.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: ColorFilter.mode(
+                            isDark
+                                ? AppColors.controlButtonLight
+                                : AppColors.textPrimary,
+                            BlendMode.srcIn,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                      ),
+                    ),
+                  ),
+                  // Scrollable content — constrained
+                  Expanded(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: _maxW),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
                         // Title
                         Text(
                           'Set your breathing pace',
@@ -166,6 +171,9 @@ class _SetupContent extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+                ],
               ),
             ),
           ],
@@ -386,7 +394,7 @@ class _SetupContent extends StatelessWidget {
             value: s.config.soundEnabled,
             onChanged: (_) =>
                 ctx.read<BreathingSetupBloc>().add(const ToggleSound()),
-            activeTrackColor: AppColors.switchTrack,
+            activeTrackColor: isDark ? AppColors.buttonBgColorDark : AppColors.buttonBgColorLight,
             inactiveTrackColor:
                 isDark ? Colors.white24 : Colors.grey.shade300,
           ),
@@ -411,9 +419,7 @@ class _SetupContent extends StatelessWidget {
             arguments: s.config,
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            foregroundColor: Colors.white,
+            backgroundColor: isDark ? AppColors.buttonBgColorDark: AppColors.buttonBgColorLight,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)),
             textStyle:

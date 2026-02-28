@@ -31,11 +31,15 @@ class AppColors {
   static const Color chipSelectedText = Color(0xFFE47B00);
 
   // ─── Chips (Dark) ───
-  static const Color chipUnselectedBgDark = Color(0xFF383840);
+  // static const Color chipUnselectedBgDark = Color(0xFF383840);
   static const Color chipUnselectedTextDark = Color(0xFFD4D4D4);
   static const Color chipSelectedBgDark = Color(0xFF3D2E1A);
   static const Color chipSelectedBorderDark = Color(0xFFE47B00);
   static const Color chipSelectedTextDark = Color(0xFFE47B00);
+  static const Color chipUnSelectedBgLight = Color(0xFFF7F7F7);
+  static const Color chipUnSelectedBgDark = Color(0xFF141414);
+  static const Color chipUnSelectedBorderLight = Color(0xFFF5F5F5);
+  static const Color chipUnSelectedBorderDark = Color(0xFF292929);
 
   // ─── Phase Control (Light) ───
   static const Color controlBgLight = Color(0xFFF5F5F5);
@@ -61,4 +65,8 @@ class AppColors {
 
   // ─── Bubble (Dark Get Ready) ───
   static const Color bubbleBgDark = Color(0xFF383840);
+
+  //button colors
+static const Color buttonBgColorLight = Color(0xFF630068);
+static const Color buttonBgColorDark = Color(0xFF823386);
 }

@@ -28,7 +28,7 @@ class DurationChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? (isDark ? AppColors.chipSelectedBgDark : AppColors.chipSelectedBg)
-              : (isDark ? AppColors.chipUnselectedBgDark : AppColors.chipUnselectedBg),
+              : (isDark ? AppColors.chipUnSelectedBgDark : AppColors.chipUnSelectedBgLight),
           borderRadius: BorderRadius.circular(50),
           border: isSelected
               ? Border.all(
@@ -37,7 +37,12 @@ class DurationChip extends StatelessWidget {
                       : AppColors.chipSelectedBorder,
                   width: 1,
                 )
-              : null,
+              : Border.all(
+                  color: isDark
+                      ? AppColors.chipUnSelectedBorderDark
+                      : AppColors.chipUnSelectedBorderLight,
+                  width: 1,
+                ),
         ),
         child: Center(
           child: Text(

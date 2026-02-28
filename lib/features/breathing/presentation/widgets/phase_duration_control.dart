@@ -20,10 +20,10 @@ class PhaseDurationControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.controlBgDark : AppColors.controlBgLight,
+        color: isDark ? AppColors.chipUnSelectedBgDark : AppColors.controlBgLight,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -67,16 +67,15 @@ class PhaseDurationControl extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 32,
-        height: 32,
+        width: 26,
+        height: 26,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: isDark ? AppColors.controlButtonDark : AppColors.controlButtonLight,
-          border: isDark ? null : Border.all(color: const Color(0xFFE0E0E0)),
         ),
         child: Icon(
           icon,
-          size: 16,
+          size: 14,
           color: isDark
               ? (enabled ? AppColors.controlIconDark : Colors.white38)
               : (enabled ? AppColors.controlIconLight : Colors.grey.shade400),

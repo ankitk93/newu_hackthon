@@ -94,7 +94,7 @@ class _Content extends StatelessWidget {
     ]);
   }
 
-  // Top bar: X (left) + Moon/Sun (right), both 24x24
+  // Top bar — full screen width, X left, Moon right
   Widget _topBar(BuildContext ctx, bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -137,7 +137,6 @@ class _Content extends StatelessWidget {
       children: [
         _topBar(ctx, isDark),
         const Spacer(),
-        // Bubble with countdown
         Container(
           width: 150,
           height: 150,
@@ -186,119 +185,149 @@ class _Content extends StatelessWidget {
   }
 
   // ─── BREATHING ───
-  // Order: "You're a natural" → Bubble → Phase label → Sub → Progress → Cycle → Pause
+  // Compact centered layout matching Figma:
+  // Top bar → [centered group: "You're a natural" → Bubble → Label → Sub → Progress → Cycle → Pause]
   Widget _breathing(BuildContext ctx, Breathing s, bool isDark) {
     return Column(
       children: [
         _topBar(ctx, isDark),
-        const Spacer(),
-        // "You're a natural"
-        Text(
-          "You're a natural",
-          style: TextStyle(
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSecondary,
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 24),
-        // Bubble
-        BreathingBubble(
-          phase: s.currentPhase,
-          secondsRemaining: s.secondsRemaining,
-          phaseDuration: _dur(s),
-          isDark: isDark,
-        ),
-        const SizedBox(height: 24),
-        // Phase label (BELOW bubble)
-        Text(
-          s.currentPhase.label,
-          style: TextStyle(
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          s.currentPhase.subtitle,
-          style: TextStyle(
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSecondary,
-            fontSize: 12,
-          ),
-        ),
-        const Spacer(),
-        // Progress bar
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: s.progress,
-              backgroundColor: isDark
-                  ? Colors.white12
-                  : AppColors.gradientEnd.withValues(alpha: 0.1),
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isDark ? AppColors.gradientStart : AppColors.gradientEnd,
-              ),
-              minHeight: 4,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        // Cycle text
-        Text(
-          'Cycle ${s.currentCycle} of ${s.config.rounds}',
-          style: TextStyle(
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSecondary,
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 20),
-        // Pause/Resume — gradient pill
-        GestureDetector(
-          onTap: () {
-            if (s.isPaused) {
-              ctx.read<BreathingSessionBloc>().add(const ResumeSession());
-            } else {
-              ctx.read<BreathingSessionBloc>().add(const PauseSession());
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppColors.gradientStart, AppColors.gradientEnd],
-              ),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  s.isPaused ? Icons.play_arrow : Icons.pause,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  s.isPaused ? 'Resume' : 'Pause',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+        Expanded(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 375),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 20),
+                      // "You're a natural"
+                      Text(
+                        "You're a natural",
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Bubble
+                      BreathingBubble(
+                        phase: s.currentPhase,
+                        secondsRemaining: s.secondsRemaining,
+                        phaseDuration: _dur(s),
+                        isDark: isDark,
+                      ),
+                      const SizedBox(height: 20),
+                      // Phase label (BELOW bubble)
+                      Text(
+                        s.currentPhase.label,
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        s.currentPhase.subtitle,
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      // Progress bar
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: s.progress,
+                          backgroundColor: isDark
+                              ? Colors.white12
+                              : AppColors.gradientEnd
+                                  .withValues(alpha: 0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            isDark
+                                ? AppColors.gradientStart
+                                : AppColors.gradientEnd,
+                          ),
+                          minHeight: 4,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Cycle text
+                      Text(
+                        'Cycle ${s.currentCycle} of ${s.config.rounds}',
+                        style: TextStyle(
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Pause/Resume — gradient pill
+                      GestureDetector(
+                        onTap: () {
+                          if (s.isPaused) {
+                            ctx
+                                .read<BreathingSessionBloc>()
+                                .add(const ResumeSession());
+                          } else {
+                            ctx
+                                .read<BreathingSessionBloc>()
+                                .add(const PauseSession());
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 28, vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.gradientStart,
+                                AppColors.gradientEnd,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                s.isPaused
+                                    ? Icons.play_arrow
+                                    : Icons.pause,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                s.isPaused ? 'Resume' : 'Pause',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 32),
       ],
     );
   }
