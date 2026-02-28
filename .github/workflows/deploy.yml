@@ -16,9 +16,12 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.38.0'
           channel: stable
 
       - run: flutter pub get
+
+      - run: flutter analyze --no-fatal-warnings
 
       - run: flutter build web --release --base-href /newu_hackthon/
 
