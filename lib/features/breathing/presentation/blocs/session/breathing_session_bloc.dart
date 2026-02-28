@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newu_health/features/breathing/domain/entities/breathing_phase.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/session/breathing_session_event.dart';
@@ -9,6 +10,7 @@ import 'package:newu_health/features/breathing/presentation/blocs/session/breath
 class BreathingSessionBloc
     extends Bloc<BreathingSessionEvent, BreathingSessionState> {
   Timer? _timer;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   BreathingSessionBloc() : super(const SessionInitial()) {
     on<StartSession>(_onStartSession);
@@ -53,6 +55,7 @@ class BreathingSessionBloc
       ));
     } else {
       // Countdown done — start breathing exercise
+      _playChime(currentState.config.soundEnabled);
       emit(Breathing(
         config: currentState.config,
         currentPhase: BreathingPhase.breatheIn,
@@ -89,8 +92,14 @@ class BreathingSessionBloc
     // Check if session is complete
     if (isNewCycle && nextCycle > currentState.config.rounds) {
       _cancelTimer();
+      _playChime(currentState.config.soundEnabled);
       emit(SessionCompleted(config: currentState.config));
       return;
+    }
+
+    // Play chime after each completed cycle
+    if (isNewCycle) {
+      _playChime(currentState.config.soundEnabled);
     }
 
     // Get duration for the next phase
@@ -116,6 +125,13 @@ class BreathingSessionBloc
       secondsRemaining: nextDuration,
       currentCycle: nextCycle,
     ));
+  }
+
+  /// Play the chime sound if sound is enabled.
+  void _playChime(bool soundEnabled) {
+    if (!soundEnabled) return;
+    _audioPlayer.stop();
+    _audioPlayer.play(AssetSource('chime.mp3'));
   }
 
   void _onPauseSession(
@@ -162,6 +178,7 @@ class BreathingSessionBloc
   @override
   Future<void> close() {
     _cancelTimer();
+    _audioPlayer.dispose();
     return super.close();
   }
 }

@@ -1,16 +1,36 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:newu_health/core/theme/app_colors.dart';
 import 'package:newu_health/core/theme/theme_cubit.dart';
+import 'package:newu_health/core/utils/dotlottie_util.dart';
 import 'package:newu_health/features/breathing/domain/entities/breathing_config.dart';
 
 /// Finish screen — exact Figma match.
 /// Vertically centered: checkmark, title, message, Start again (gradient), Back to set up (purple).
 /// NO stats card.
-class FinishScreen extends StatelessWidget {
+class FinishScreen extends StatefulWidget {
   final BreathingConfig config;
   const FinishScreen({super.key, required this.config});
+
+  @override
+  State<FinishScreen> createState() => _FinishScreenState();
+}
+
+class _FinishScreenState extends State<FinishScreen> {
+  late final Future<Uint8List> _animationBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationBytes =
+        loadDotLottieAsset('assets/animations/green_check.lottie');
+  }
+
+  BreathingConfig get config => widget.config;
 
   @override
   Widget build(BuildContext context) {
@@ -72,18 +92,20 @@ class FinishScreen extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        // Green checkmark circle
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.success,
-                          ),
-                          child: const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 40,
+                        SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: FutureBuilder<Uint8List>(
+                            future: _animationBytes,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Lottie.memory(
+                                  snapshot.data!,
+                                  repeat: false,
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            },
                           ),
                         ),
                         const SizedBox(height: 24),

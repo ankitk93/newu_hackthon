@@ -27,7 +27,7 @@ class BreathingConfig extends Equatable {
     this.breatheOutDuration = 4,
     this.holdOutDuration = 4,
     this.rounds = 4,
-    this.soundEnabled = false,
+    this.soundEnabled = true,
   });
 
   /// Total duration of one complete breathing cycle in seconds.
