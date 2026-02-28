@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:archive/archive.dart';
 import 'package:flutter/services.dart';
 
@@ -15,14 +13,13 @@ Future<Uint8List> loadDotLottieAsset(String assetPath) async {
 
   for (final file in archive) {
     if (file.name.startsWith('animations/') && file.name.endsWith('.json')) {
-      return file.content as Uint8List;
+      return Uint8List.fromList(file.content);
     }
   }
 
-  // Fallback: look for any .json that looks like a Lottie animation
   for (final file in archive) {
     if (file.name.endsWith('.json') && file.name != 'manifest.json') {
-      return file.content as Uint8List;
+      return Uint8List.fromList(file.content);
     }
   }
 
