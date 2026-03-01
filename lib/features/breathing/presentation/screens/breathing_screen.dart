@@ -80,16 +80,17 @@ class _Content extends StatelessWidget {
     final base = isDark
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
+    double cw(double factor, double max) => (w * factor).clamp(0, max);
     return Stack(children: [
       Positioned(
         right: -20,
         top: h * 0.03,
-        child: SvgPicture.asset('$base/right_cloud.svg', width: w * 0.28),
+        child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
       ),
       Positioned(
         left: -30,
         top: h * 0.35,
-        child: SvgPicture.asset('$base/left_cloud.svg', width: w * 0.3),
+        child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
       ),
     ]);
   }
@@ -211,7 +212,7 @@ class _Content extends StatelessWidget {
         Expanded(
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 375),
+              constraints: const BoxConstraints(maxWidth: 400),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

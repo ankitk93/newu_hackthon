@@ -24,7 +24,7 @@ class SetupScreen extends StatelessWidget {
 class _SetupContent extends StatelessWidget {
   const _SetupContent();
 
-  static const double _maxW = 375.0;
+  static const double _maxW = 400.0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class _SetupContent extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Customise your breathing session.\nYou can always change this later.',
+                          'A simple breathing technique to calm\nyour mind and body.',
                           style: TextStyle(
                             color: isDark
                                 ? AppColors.textSecondaryDark
@@ -186,30 +186,27 @@ class _SetupContent extends StatelessWidget {
     final base = isDark
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
+    double cw(double factor, double max) => (w * factor).clamp(0, max);
     return Stack(
       children: [
-        // Top-left
         Positioned(
           left: -20,
           top: h * 0.05,
           child: SvgPicture.asset(
             isDark ? '$base/one_small_cloud.svg' : '$base/small_clouds.svg',
-            width: w * 0.2,
+            width: cw(0.2, 120),
           ),
         ),
-        // Top-right
         Positioned(
           right: -30,
           top: h * 0.02,
-          child: SvgPicture.asset('$base/right_cloud.svg', width: w * 0.3),
+          child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.3, 200)),
         ),
-        // Mid-left
         Positioned(
           left: -40,
           top: h * 0.40,
-          child: SvgPicture.asset('$base/left_cloud.svg', width: w * 0.3),
+          child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
         ),
-        // Bottom-right
         Positioned(
           right: -20,
           bottom: h * 0.05,
@@ -217,15 +214,14 @@ class _SetupContent extends StatelessWidget {
             isDark
                 ? '$base/one_medium_cloud.svg'
                 : '$base/one_big_cloud.svg',
-            width: w * 0.35,
+            width: cw(0.35, 240),
           ),
         ),
-        // Bottom-left
         Positioned(
           left: w * 0.05,
           bottom: h * 0.15,
           child: SvgPicture.asset(
-              '$base/two_overlapping_cloud.svg', width: w * 0.2),
+              '$base/two_overlapping_cloud.svg', width: cw(0.2, 120)),
         ),
       ],
     );
@@ -419,7 +415,9 @@ class _SetupContent extends StatelessWidget {
             arguments: s.config,
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: isDark ? AppColors.buttonBgColorDark: AppColors.buttonBgColorLight,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)),
             textStyle:

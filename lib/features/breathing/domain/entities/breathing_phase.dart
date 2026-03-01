@@ -13,11 +13,11 @@ extension BreathingPhaseExtension on BreathingPhase {
       case BreathingPhase.breatheIn:
         return 'Breathe in';
       case BreathingPhase.holdIn:
-        return 'Hold';
+        return 'Hold softly';
       case BreathingPhase.breatheOut:
         return 'Breathe out';
       case BreathingPhase.holdOut:
-        return 'Hold';
+        return 'Hold gently';
     }
   }
 
@@ -26,11 +26,11 @@ extension BreathingPhaseExtension on BreathingPhase {
       case BreathingPhase.breatheIn:
         return 'nice and slow';
       case BreathingPhase.holdIn:
-        return 'hold softly';
+        return 'just be here';
       case BreathingPhase.breatheOut:
-        return 'let it flow';
+        return 'nice and slow';
       case BreathingPhase.holdOut:
-        return 'hold gently';
+        return 'you are doing great';
     }
   }
 

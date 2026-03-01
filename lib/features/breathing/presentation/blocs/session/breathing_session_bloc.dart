@@ -38,9 +38,7 @@ class BreathingSessionBloc
     if (currentState is GetReady) {
       _handleGetReadyTick(currentState, emit);
     } else if (currentState is Breathing) {
-      if (!currentState.isPaused) {
-        _handleBreathingTick(currentState, emit);
-      }
+      _handleBreathingTick(currentState, emit);
     }
   }
 
@@ -140,6 +138,7 @@ class BreathingSessionBloc
   ) {
     final currentState = state;
     if (currentState is Breathing) {
+      _cancelTimer();
       emit(currentState.copyWith(isPaused: true));
     }
   }
@@ -151,6 +150,7 @@ class BreathingSessionBloc
     final currentState = state;
     if (currentState is Breathing) {
       emit(currentState.copyWith(isPaused: false));
+      _startTimer();
     }
   }
 

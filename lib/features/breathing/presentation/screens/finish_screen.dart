@@ -64,7 +64,7 @@ class _FinishScreenState extends State<FinishScreen> {
             SafeArea(
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 375),
+                  constraints: const BoxConstraints(maxWidth: 400),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
@@ -219,16 +219,17 @@ class _FinishScreenState extends State<FinishScreen> {
     final base = isDark
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
+    double cw(double factor, double max) => (w * factor).clamp(0, max);
     return Stack(children: [
       Positioned(
         right: -20,
         top: h * 0.03,
-        child: SvgPicture.asset('$base/right_cloud.svg', width: w * 0.28),
+        child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
       ),
       Positioned(
         left: -30,
         bottom: h * 0.1,
-        child: SvgPicture.asset('$base/left_cloud.svg', width: w * 0.3),
+        child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
       ),
     ]);
   }
