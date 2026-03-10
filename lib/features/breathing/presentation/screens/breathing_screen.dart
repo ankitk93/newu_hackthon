@@ -8,6 +8,7 @@ import 'package:newu_health/features/breathing/domain/entities/breathing_phase.d
 import 'package:newu_health/features/breathing/presentation/blocs/session/breathing_session_bloc.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/session/breathing_session_event.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/session/breathing_session_state.dart';
+import 'package:newu_health/core/utils/responsive_utils.dart';
 import 'package:newu_health/features/breathing/presentation/widgets/breathing_bubble.dart';
 
 class BreathingScreen extends StatelessWidget {
@@ -81,18 +82,21 @@ class _Content extends StatelessWidget {
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
     double cw(double factor, double max) => (w * factor).clamp(0, max);
-    return Stack(children: [
-      Positioned(
-        right: -20,
-        top: h * 0.03,
-        child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
-      ),
-      Positioned(
-        left: -30,
-        top: h * 0.35,
-        child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
-      ),
-    ]);
+    return Opacity(
+      opacity: 0.4,
+      child: Stack(children: [
+        Positioned(
+          right: -20,
+          top: h * 0.03,
+          child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
+        ),
+        Positioned(
+          left: -30,
+          top: h * 0.35,
+          child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
+        ),
+      ]),
+    );
   }
 
   // Top bar — full screen width, X left, Moon right
@@ -127,15 +131,22 @@ class _Content extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => ctx.read<ThemeCubit>().toggleTheme(),
-            child: SvgPicture.asset(
-              isDark
-                  ? 'assets/images/dark_mode_assets/icon_sun.svg'
-                  : 'assets/images/light_mode_assets/icon_moon.svg',
+            child: Container(
               width: 24,
               height: 24,
-              colorFilter: ColorFilter.mode(
-                isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-                BlendMode.srcIn,
+              decoration: BoxDecoration(shape: BoxShape.circle, color: bg),
+              child: Center(
+                child: SvgPicture.asset(
+                  isDark
+                      ? 'assets/images/dark_mode_assets/icon_sun.svg'
+                      : 'assets/images/light_mode_assets/icon_moon.svg',
+                  width: 12,
+                  height: 12,
+                  colorFilter: ColorFilter.mode(
+                    isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
@@ -155,9 +166,20 @@ class _Content extends StatelessWidget {
           height: 150,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isDark ? AppColors.bubbleBgDark : Colors.white,
-            border: Border.all(
-              color: isDark ? Colors.white10 : Colors.grey.shade200,
+            gradient: RadialGradient(
+              center: Alignment.center,
+              radius: 0.85,
+              colors: isDark
+                  ? [AppColors.bubbleGradientDarkStart, AppColors.bubbleGradientDarkEnd]
+                  : [AppColors.bubbleGradientLightStart, AppColors.bubbleGradientLightEnd],
+            ),
+            border: Border(
+              top: BorderSide(
+                color: isDark
+                    ? AppColors.bubbleBorderDark
+                    : AppColors.bubbleBorderLight,
+                width: 1,
+              ),
             ),
           ),
           child: Center(
@@ -178,7 +200,7 @@ class _Content extends StatelessWidget {
           'Get ready',
           style: TextStyle(
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-            fontSize: 24,
+            fontSize: Responsive.fontSize(ctx, 24),
             fontWeight: FontWeight.w700,
             height: 39 / 24,
           ),
@@ -191,7 +213,7 @@ class _Content extends StatelessWidget {
             color: isDark
                 ? AppColors.crossIconColorDark
                 : AppColors.textSecondary,
-            fontSize: 14,
+            fontSize: Responsive.fontSize(ctx, 14),
             fontWeight: FontWeight.w400,
             height: 21 / 14,
           ),
@@ -227,17 +249,27 @@ class _Content extends StatelessWidget {
                           color: isDark
                               ? AppColors.textSecondaryDark
                               : AppColors.textSecondary,
-                          fontSize: 12,
+                          fontSize: Responsive.fontSize(ctx, 12),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Bubble
-                      BreathingBubble(
-                        phase: s.currentPhase,
-                        secondsRemaining: s.secondsRemaining,
-                        phaseDuration: _dur(s),
-                        isDark: isDark,
-                      ),
+                      // Bubble in fixed-size container to prevent content shifting
+                      Builder(builder: (context) {
+                        final maxSize = (MediaQuery.of(context).size.width * 0.5).clamp(140.0, 220.0);
+                        return SizedBox(
+                          width: maxSize,
+                          height: maxSize,
+                          child: Center(
+                            child: BreathingBubble(
+                              phase: s.currentPhase,
+                              secondsRemaining: s.secondsRemaining,
+                              phaseDuration: _dur(s),
+                              isDark: isDark,
+                              isPaused: s.isPaused,
+                            ),
+                          ),
+                        );
+                      }),
                       const SizedBox(height: 20),
                       // Phase label (BELOW bubble)
                       Text(
@@ -246,7 +278,7 @@ class _Content extends StatelessWidget {
                           color: isDark
                               ? AppColors.textPrimaryDark
                               : AppColors.textPrimary,
-                          fontSize: 24,
+                          fontSize: Responsive.fontSize(ctx, 24),
                           fontWeight: FontWeight.w700,
                           height: 39 / 24,
                         ),
@@ -259,7 +291,7 @@ class _Content extends StatelessWidget {
                           color: isDark
                               ? AppColors.crossIconColorDark
                               : AppColors.textSecondary,
-                          fontSize: 14,
+                          fontSize: Responsive.fontSize(ctx, 14),
                           fontWeight: FontWeight.w400,
                           height: 21 / 14,
                         ),
@@ -316,13 +348,9 @@ class _Content extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (s.isPaused) {
-                            ctx
-                                .read<BreathingSessionBloc>()
-                                .add(const ResumeSession());
+                            ctx.read<BreathingSessionBloc>().add(const ResumeSession());
                           } else {
-                            ctx
-                                .read<BreathingSessionBloc>()
-                                .add(const PauseSession());
+                            ctx.read<BreathingSessionBloc>().add(const PauseSession());
                           }
                         },
                         child: Container(

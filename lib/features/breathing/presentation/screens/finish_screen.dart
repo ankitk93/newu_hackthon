@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:newu_health/core/theme/app_colors.dart';
 import 'package:newu_health/core/theme/theme_cubit.dart';
 import 'package:newu_health/core/utils/dotlottie_util.dart';
+import 'package:newu_health/core/utils/responsive_utils.dart';
 import 'package:newu_health/features/breathing/domain/entities/breathing_config.dart';
 
 /// Finish screen — exact Figma match.
@@ -62,36 +63,41 @@ class _FinishScreenState extends State<FinishScreen> {
                 ),
               ),
             SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 400),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 12),
-                        // Theme toggle — top right
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () =>
-                                context.read<ThemeCubit>().toggleTheme(),
-                            child: SvgPicture.asset(
-                              isDark
-                                  ? 'assets/images/dark_mode_assets/icon_sun.svg'
-                                  : 'assets/images/light_mode_assets/icon_moon.svg',
-                              width: 24,
-                              height: 24,
-                              colorFilter: ColorFilter.mode(
-                                isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.textPrimary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
+              child: Column(
+                children: [
+                  // Theme toggle — full-width, top right (outside ConstrainedBox)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () =>
+                            context.read<ThemeCubit>().toggleTheme(),
+                        child: SvgPicture.asset(
+                          isDark
+                              ? 'assets/images/dark_mode_assets/icon_sun.svg'
+                              : 'assets/images/light_mode_assets/icon_moon.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: ColorFilter.mode(
+                            isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.textPrimary,
+                            BlendMode.srcIn,
                           ),
                         ),
-                        const Spacer(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 400),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            children: [
+                              const Spacer(),
                         SizedBox(
                           width: 120,
                           height: 120,
@@ -116,7 +122,7 @@ class _FinishScreenState extends State<FinishScreen> {
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : AppColors.textPrimary,
-                            fontSize: 24,
+                            fontSize: Responsive.fontSize(context, 24),
                             fontWeight: FontWeight.w700,
                           ),
                           textAlign: TextAlign.center,
@@ -129,23 +135,18 @@ class _FinishScreenState extends State<FinishScreen> {
                             color: isDark
                                 ? AppColors.textSecondaryDark
                                 : AppColors.textSecondary,
-                            fontSize: 12,
+                            fontSize: Responsive.fontSize(context, 12),
                             height: 1.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 32),
-                        // Start again — gradient button
+                        // Start again — primary purple button
                         Container(
                           width: double.infinity,
                           height: 52,
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppColors.gradientStart,
-                                AppColors.gradientEnd
-                              ],
-                            ),
+                            color: isDark ? AppColors.buttonBgColorDark : AppColors.buttonBgColorLight,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: ElevatedButton(
@@ -160,15 +161,19 @@ class _FinishScreenState extends State<FinishScreen> {
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50)),
-                              textStyle: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                              textStyle: TextStyle(
+                                  fontSize: Responsive.fontSize(context, 16), fontWeight: FontWeight.w600),
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('Start again'),
-                                SizedBox(width: 6),
-                                Text('🚀', style: TextStyle(fontSize: 16)),
+                                const Text('Start again'),
+                                const SizedBox(width: 8),
+                                SvgPicture.asset('assets/icons/fast_wind.svg',
+                                    width: 18,
+                                    height: 18,
+                                    colorFilter: const ColorFilter.mode(
+                                        Colors.white, BlendMode.srcIn)),
                               ],
                             ),
                           ),
@@ -196,17 +201,20 @@ class _FinishScreenState extends State<FinishScreen> {
                                 color: isDark
                                     ? AppColors.textPrimaryDark
                                     : AppColors.backToSetup,
-                                fontSize: 14,
+                                fontSize: Responsive.fontSize(context, 14),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                        const Spacer(),
-                      ],
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -220,17 +228,20 @@ class _FinishScreenState extends State<FinishScreen> {
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
     double cw(double factor, double max) => (w * factor).clamp(0, max);
-    return Stack(children: [
-      Positioned(
-        right: -20,
-        top: h * 0.03,
-        child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
-      ),
-      Positioned(
-        left: -30,
-        bottom: h * 0.1,
-        child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
-      ),
-    ]);
+    return Opacity(
+      opacity: 0.4,
+      child: Stack(children: [
+        Positioned(
+          right: -20,
+          top: h * 0.03,
+          child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.28, 200)),
+        ),
+        Positioned(
+          left: -30,
+          bottom: h * 0.1,
+          child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
+        ),
+      ]),
+    );
   }
 }

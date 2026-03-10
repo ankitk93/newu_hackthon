@@ -6,6 +6,7 @@ import 'package:newu_health/core/theme/theme_cubit.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/setup/breathing_setup_bloc.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/setup/breathing_setup_event.dart';
 import 'package:newu_health/features/breathing/presentation/blocs/setup/breathing_setup_state.dart';
+import 'package:newu_health/core/utils/responsive_utils.dart';
 import 'package:newu_health/features/breathing/presentation/widgets/duration_chip.dart';
 import 'package:newu_health/features/breathing/presentation/widgets/phase_duration_control.dart';
 
@@ -102,7 +103,7 @@ class _SetupContent extends StatelessWidget {
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : AppColors.textPrimary,
-                            fontSize: 24,
+                            fontSize: Responsive.fontSize(context, 24),
                             fontWeight: FontWeight.w700,
                           ),
                           textAlign: TextAlign.center,
@@ -114,7 +115,7 @@ class _SetupContent extends StatelessWidget {
                             color: isDark
                                 ? AppColors.textSecondaryDark
                                 : AppColors.textSecondary,
-                            fontSize: 12,
+                            fontSize: Responsive.fontSize(context, 12),
                             height: 1.5,
                           ),
                           textAlign: TextAlign.center,
@@ -187,62 +188,71 @@ class _SetupContent extends StatelessWidget {
         ? 'assets/images/dark_mode_assets'
         : 'assets/images/light_mode_assets';
     double cw(double factor, double max) => (w * factor).clamp(0, max);
-    return Stack(
-      children: [
-        Positioned(
-          left: -20,
-          top: h * 0.05,
-          child: SvgPicture.asset(
-            isDark ? '$base/one_small_cloud.svg' : '$base/small_clouds.svg',
-            width: cw(0.2, 120),
+    return Opacity(
+      opacity: 0.4,
+      child: Stack(
+        children: [
+          Positioned(
+            left: -20,
+            top: h * 0.05,
+            child: SvgPicture.asset(
+              isDark ? '$base/one_small_cloud.svg' : '$base/small_clouds.svg',
+              width: cw(0.2, 120),
+            ),
           ),
-        ),
-        Positioned(
-          right: -30,
-          top: h * 0.02,
-          child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.3, 200)),
-        ),
-        Positioned(
-          left: -40,
-          top: h * 0.40,
-          child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
-        ),
-        Positioned(
-          right: -20,
-          bottom: h * 0.05,
-          child: SvgPicture.asset(
-            isDark
-                ? '$base/one_medium_cloud.svg'
-                : '$base/one_big_cloud.svg',
-            width: cw(0.35, 240),
+          Positioned(
+            right: -30,
+            top: h * 0.02,
+            child: SvgPicture.asset('$base/right_cloud.svg', width: cw(0.3, 200)),
           ),
-        ),
-        Positioned(
-          left: w * 0.05,
-          bottom: h * 0.15,
-          child: SvgPicture.asset(
-              '$base/two_overlapping_cloud.svg', width: cw(0.2, 120)),
-        ),
-      ],
+          Positioned(
+            left: -40,
+            top: h * 0.40,
+            child: SvgPicture.asset('$base/left_cloud.svg', width: cw(0.3, 200)),
+          ),
+          Positioned(
+            right: -20,
+            bottom: h * 0.05,
+            child: SvgPicture.asset(
+              isDark
+                  ? '$base/one_medium_cloud.svg'
+                  : '$base/one_big_cloud.svg',
+              width: cw(0.35, 240),
+            ),
+          ),
+          Positioned(
+            left: w * 0.05,
+            bottom: h * 0.15,
+            child: SvgPicture.asset(
+                '$base/two_overlapping_cloud.svg', width: cw(0.2, 120)),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _title(String t, bool isDark) => Text(
+  Widget _title(String t, bool isDark, {BuildContext? ctx}) {
+    final fs = ctx != null ? Responsive.fontSize(ctx, 15) : 15.0;
+    return Text(
         t,
         style: TextStyle(
           color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-          fontSize: 15,
+          fontSize: fs,
           fontWeight: FontWeight.w700,
         ),
       );
+  }
 
-  Widget _sub(String t, bool isDark) => Text(
+  Widget _sub(String t, bool isDark, {BuildContext? ctx}) {
+    final fs = ctx != null ? Responsive.fontSize(ctx, 12) : 12.0;
+    return Text(
         t,
         style: TextStyle(
           color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
-          fontSize: 12,
+          fontSize: fs,
         ),
       );
+  }
 
   Widget _durationChips(BuildContext ctx, bool isDark) {
     const durations = [3, 4, 5, 10];
@@ -327,9 +337,10 @@ class _SetupContent extends StatelessWidget {
               ],
             ),
           ),
-          AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
-            secondChild: Padding(
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child:s.isAdvancedTimingOpen ? Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Column(children: [
                 PhaseDurationControl(
@@ -361,11 +372,7 @@ class _SetupContent extends StatelessWidget {
                         UpdatePhaseDuration(
                             phaseType: PhaseType.holdOut, seconds: v))),
               ]),
-            ),
-            crossFadeState: s.isAdvancedTimingOpen
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 300),
+            ): const SizedBox(width: double.infinity, height: 0),
           ),
         ],
       ),
@@ -402,11 +409,9 @@ class _SetupContent extends StatelessWidget {
   Widget _startButton(BuildContext ctx, bool isDark) {
     return BlocBuilder<BreathingSetupBloc, BreathingSetupState>(
       builder: (ctx, s) => Container(
-        height: 52,
+        height: 56,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.gradientStart, AppColors.gradientEnd],
-          ),
+          color: isDark ? AppColors.buttonBgColorDark : AppColors.buttonBgColorLight,
           borderRadius: BorderRadius.circular(50),
         ),
         child: ElevatedButton(

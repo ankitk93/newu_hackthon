@@ -90,7 +90,6 @@ class BreathingSessionBloc
     // Check if session is complete
     if (isNewCycle && nextCycle > currentState.config.rounds) {
       _cancelTimer();
-      _playChime(currentState.config.soundEnabled);
       emit(SessionCompleted(config: currentState.config));
       return;
     }

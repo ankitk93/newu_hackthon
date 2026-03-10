@@ -63,8 +63,16 @@ class AppColors {
   static const Color accent = Color(0xFF7C4DFF);
   static const Color backToSetup = Color(0xFF6C0862);
 
-  // ─── Bubble (Dark Get Ready) ───
+  // ─── Bubble ───
   static const Color bubbleBgDark = Color(0xFF383840);
+  // Light: #C97CF5 at 40% / 10%  |  Dark: #7B2D8E at 20% / 5%
+  static const Color bubbleGradientLightStart = Color(0x66C97CF5);
+  static const Color bubbleGradientLightEnd = Color(0x1AC97CF5);
+  static const Color bubbleGradientDarkStart = Color(0x337B2D8E);
+  static const Color bubbleGradientDarkEnd = Color(0x0D7B2D8E);
+  // Border: Light #C97CF5 at 25%  |  Dark #7B2D8E at 12%
+  static const Color bubbleBorderLight = Color(0x40C97CF5);
+  static const Color bubbleBorderDark = Color(0x1F7B2D8E);
 
   //button colors
   static const Color buttonBgColorLight = Color(0xFF630068);

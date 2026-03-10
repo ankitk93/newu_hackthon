@@ -23,14 +23,14 @@ class BreathingSetupState extends Equatable {
 
   BreathingSetupState copyWith({
     BreathingConfig? config,
-    Object? selectedPresetDuration = _sentinel,
+    Object? selectedPresetDuration = _sentinel, // default value is _sentinel, not null
     bool? isAdvancedTimingOpen,
   }) {
     return BreathingSetupState(
       config: config ?? this.config,
       selectedPresetDuration: identical(selectedPresetDuration, _sentinel)
-          ? this.selectedPresetDuration
-          : selectedPresetDuration as int?,
+          ? this.selectedPresetDuration // user didn't provided any value, so keep the old value
+          : selectedPresetDuration as int?, // user provided a value, so use it
       isAdvancedTimingOpen:
           isAdvancedTimingOpen ?? this.isAdvancedTimingOpen,
     );
