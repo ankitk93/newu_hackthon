@@ -19,6 +19,8 @@ dependencies:
   # Network
   dio: ^5.7.0
   connectivity_plus: ^6.1.4
+  network_module:
+    path: packages/network_module
 
   # Local Database
   hive: ^2.2.3

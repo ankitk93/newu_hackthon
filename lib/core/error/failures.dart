@@ -26,6 +26,12 @@ class ServerFailure extends Failure {
   const ServerFailure({required super.message, super.code});
 }
 
+/// Client error (4xx): bad request, unauthorized, forbidden, not found, validation, rate limit.
+/// Use [code] for 400, 401, 403, 404, 422, 429 etc. to show the right UI or message.
+class ClientFailure extends Failure {
+  const ClientFailure({required super.message, super.code});
+}
+
 /// Request timeout.
 class TimeoutFailure extends Failure {
   const TimeoutFailure()
